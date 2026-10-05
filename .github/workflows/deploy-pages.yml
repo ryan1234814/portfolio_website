@@ -1,0 +1,98 @@
+# Deploy Vite site to GitHub Pages (3 stages: build -> verify -> deploy).
+#
+# REQUIRED ONE-TIME repo setting:
+#   Settings -> Pages -> "Build and deployment" -> Source: "GitHub Actions"
+# Site URL will be: https://ryan1234814.github.io/portfolio_website/
+#
+# Notes:
+# - vite.config.js builds to `docs/` with `base: './'`, which is exactly what
+#   this workflow uploads — no config changes needed.
+# - `docs/` stays gitignored; the old `npm run deploy` (gh-pages branch) is
+#   no longer used once Pages source is "GitHub Actions".
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Required by actions/deploy-pages: never cancel an in-flight production rollout.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # ---- Stage 1: install, build, package the static site ----
+  build:
+    name: '1. Build site'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (outputs to docs/)
+        run: npm run build
+
+      - name: Sanity-check build output
+        run: |
+          test -f docs/index.html || (echo "::error::docs/index.html missing after build" && exit 1)
+          ls docs
+
+      - name: Disable Jekyll processing
+        run: touch docs/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  # ---- Stage 2: independently verify the uploaded artifact ----
+  verify:
+    name: '2. Verify artifact'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Pages artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: ./pages-artifact
+
+      - name: Smoke-check artifact contents
+        run: |
+          mkdir -p ./pages-check
+          tar -xf ./pages-artifact/artifact.tar -C ./pages-check
+          test -f ./pages-check/index.html || (echo "::error::index.html missing from Pages artifact" && exit 1)
+          echo "Artifact OK:"
+          ls ./pages-check
+
+  # ---- Stage 3: deploy the verified artifact to Pages ----
+  deploy:
+    name: '3. Deploy to Pages'
+    needs: [build, verify]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
