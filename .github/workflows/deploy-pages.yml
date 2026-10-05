@@ -44,6 +44,9 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          # Auto-enable Pages on first run if the site resource isn't provisioned yet.
+          enablement: true
 
       - name: Install dependencies
         run: npm ci
