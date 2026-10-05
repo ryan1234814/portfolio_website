@@ -1,0 +1,6 @@
+{
+  "name": "My Portfolio",
+  "description": "Ryan George Koickal — Python developer & data scientist portfolio: edge-AI, RAG, multi-agent LLMs, React, FastAPI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

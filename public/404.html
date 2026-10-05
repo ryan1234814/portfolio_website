@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 Page Not Found - Ryan George</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    <script>
+      // Route recovery — known tab paths redirect into the SPA before paint.
+      (function () {
+        var validTabs = ['home','profile','experience','education','projects','work',
+                         'achievements','certificates','contact'];
+        var repoFolders = ['my-portfolio', 'portfolio'];
+        var path = window.location.pathname;
+        var segments = path.split('/').filter(Boolean);
+        var basePath = '/';
+        if (segments.length > 0 && repoFolders.indexOf(segments[0].toLowerCase()) !== -1) {
+          basePath = '/' + segments[0] + '/';
+          segments = segments.slice(1);
+        }
+        if (segments.length === 1) {
+          var page = segments[0].toLowerCase();
+          if (page === 'index.html') page = 'home';
+          if (validTabs.indexOf(page) !== -1) {
+            var targetTab = page === 'work' ? 'projects' : page;
+            window.location.replace(basePath + (targetTab === 'home' ? '' : '?page=' + targetTab));
+          }
+        }
+      })();
+    </script>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { background:#fff; color:#333; font-family:'Arvo',serif; min-height:100vh;
+             display:flex; align-items:center; justify-content:center; }
+      .page_404 { padding:40px 16px; background:#fff; font-family:'Arvo',serif;
+                  width:100%; max-width:900px; margin:0 auto; text-align:center; }
+      .four_zero_four_bg { background-image:url('/dribbble_1.gif'), url('./dribbble_1.gif');
+                           height:400px; background-position:center; background-repeat:no-repeat; }
+      .four_zero_four_bg h1 { font-size:80px; line-height:1; font-weight:400; text-align:center; color:#333; }
+      .contant_box_404 { margin-top:-50px; }
+      .contant_box_404 h3 { font-size:30px; font-weight:400; color:#333; margin-bottom:8px; }
+      .contant_box_404 p { font-size:16px; color:#333; margin-bottom:20px; }
+      .link_404 { position:relative; display:inline-flex; align-items:center; justify-content:center;
+                  gap:18px; padding:14px 36px; margin:12px 0; border-radius:9999px; overflow:hidden;
+                  background:#080a0f; border:1px solid rgba(255,255,255,0.15);
+                  box-shadow:0 25px 50px -12px rgba(0,0,0,0.25); text-decoration:none;
+                  transition:border-color .3s ease, box-shadow .3s ease; }
+      .link_404::before { content:''; position:absolute; inset:0; background:#C8A754;
+                          transform-origin:right; transform:scaleX(0); transition:transform .5s ease-out; }
+      .link_404:hover { border-color:rgba(200,167,84,0.4); }
+      .link_404:hover::before { transform-origin:left; transform:scaleX(1); }
+      .link_404 span { position:relative; z-index:10; font-family:'Poppins',sans-serif; font-size:22px;
+                       font-weight:700; text-transform:uppercase; letter-spacing:-0.025em; color:#e5e5e5;
+                       transition:color .3s ease; }
+      .link_404 svg { position:relative; z-index:10; width:24px; height:24px; color:#a3a3a3;
+                      flex-shrink:0; transition:color .3s ease; }
+      .link_404:hover span, .link_404:hover svg { color:#000; }
+    </style>
+  </head>
+  <body>
+    <div class="page_404">
+      <div class="four_zero_four_bg" id="gif-bg">
+        <h1>404</h1>
+      </div>
+      <div class="contant_box_404">
+        <h3>Look like you're lost</h3>
+        <p>the page you are looking for not avaible!</p>
+        <a href="/" id="home-link" class="link_404">
+          <span>Go to Home</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 18 L15.2 8.8" />
+            <path d="M18 6 L9 6" />
+            <path d="M18 10 L18 16" />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        // Preload the connecting GIF
+        var preload = new Image();
+        preload.src = '/dribbble_connected.gif';
+
+        // Recompute the target href (repo-base aware)
+        var repoFolders = ['my-portfolio', 'portfolio'];
+        var segments = window.location.pathname.split('/').filter(Boolean);
+        var targetHref = '/';
+        if (segments.length > 0 && repoFolders.indexOf(segments[0].toLowerCase()) !== -1) {
+          targetHref = '/' + segments[0] + '/';
+        }
+        var homeLink = document.getElementById('home-link');
+        if (homeLink) homeLink.setAttribute('href', targetHref);
+
+        var connecting = false;
+        homeLink.addEventListener('click', function (e) {
+          e.preventDefault();
+          if (connecting) return;
+          connecting = true;
+          var bg = document.getElementById('gif-bg');
+          if (bg) {
+            bg.style.backgroundImage =
+              "url('/dribbble_connected.gif?t=" + Date.now() + "'), url('./dribbble_connected.gif')";
+          }
+          setTimeout(function () {
+            window.location.href = targetHref;
+          }, 1500);
+        });
+      })();
+    </script>
+  </body>
+</html>

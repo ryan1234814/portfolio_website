@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ryan George - Portfolio</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='47' fill='white' stroke='%230a3a9e' stroke-width='3'/%3E%3Cpolygon points='50,30 63,40 58,55 42,55 37,40' fill='%23032477' stroke='%23C8A754' stroke-width='1.5'/%3E%3C/svg%3E" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YNLVLNRPDW"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-YNLVLNRPDW');
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Caveat:wght@400;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Manrope:wght@200;300;400;500;600;700;800&family=Oswald:wght@400;500;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              chelsea:      '#032477',
+              chelseaLight: '#0a3a9e',
+              gold:         '#C8A754',
+              goldDeep:     '#a8863d',
+              pitch:        '#1b7a3d',
+              plPurple:     '#38003c',
+              plLime:       '#dbe4ff',
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      :root {
+        --neon-blue: #C8A754; /* Chelsea gold accent (legacy token name kept) */
+        --chelsea-blue: #032477;
+        --chelsea-blue-light: #0a3a9e;
+        --matchday-gold: #C8A754;
+        --pitch-green: #1b7a3d;
+        --pl-purple: #38003c;
+      }
+
+      body {
+        font-family: 'Manrope', sans-serif;
+        background-color: #050505;
+        color: #ffffff;
+        overflow-x: hidden;
+      }
+      .font-oswald  { font-family: 'Oswald', sans-serif; }
+      .font-poppins { font-family: 'Poppins', sans-serif; }
+
+      ::selection {
+        background-color: rgba(200, 167, 84, 0.3);
+        color: #fff;
+      }
+
+      /* Kill black tap-highlight boxes and focus outlines on mobile */
+      *, *::before, *::after { -webkit-tap-highlight-color: transparent !important; }
+
+      button, a, input, textarea, select, [role="button"] {
+        -webkit-tap-highlight-color: transparent !important;
+        outline: none !important;
+      }
+      button:focus, button:active, button:focus-visible {
+        outline: none !important;
+        box-shadow: none !important;
+      }
+
+      /* Custom cursor (desktop only). Native cursor hidden globally; the gold
+         droplet replacement is therefore not optional. */
+      @media (hover: hover) and (pointer: fine) {
+        html, body, *, a, button, input, textarea, .hover-target {
+          cursor: none !important;
+        }
+      }
+
+      /* Mow-line stripes: alternating pitch-green / chelsea-blue bands, 80px each */
+      .pitch-stripes {
+        background-image: repeating-linear-gradient(
+          90deg,
+          rgba(27, 122, 61, 0.05) 0px,
+          rgba(27, 122, 61, 0.05) 80px,
+          rgba(3, 36, 119, 0.05) 80px,
+          rgba(3, 36, 119, 0.05) 160px
+        );
+      }
+
+      /* Floodlight pooling from the two top corners of the stand */
+      .floodlight-glow {
+        background:
+          radial-gradient(60% 40% at 12% 0%, rgba(219, 228, 255, 0.08) 0%, rgba(219, 228, 255, 0) 70%),
+          radial-gradient(60% 40% at 88% 0%, rgba(219, 228, 255, 0.08) 0%, rgba(219, 228, 255, 0) 70%);
+      }
+
+      /* Ticket-stub notch: 20px gold-rimmed perforation on the left edge */
+      .ticket-stub { position: relative; }
+      .ticket-stub::before,
+      .ticket-stub::after {
+        content: '';
+        position: absolute;
+        left: -10px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #03060f;
+        box-shadow: inset 0 0 0 1.5px rgba(200, 167, 84, 0.35);
+      }
+      .ticket-stub::before { top: 24%; }
+      .ticket-stub::after  { bottom: 24%; }
+
+      /* Scoreboard micro-label */
+      .scoreboard-label {
+        font-family: 'Oswald', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.28em;
+      }
+
+      /* Liquid-glass text */
+      .liquid-glass-text {
+        color: rgba(255, 255, 255, 0.1);
+        background: linear-gradient(
+          135deg,
+          rgba(255,255,255,0.92) 0%,
+          rgba(255,255,255,0.42) 25%,
+          #C8A754 50%,
+          rgba(255,255,255,0.42) 75%,
+          rgba(255,255,255,0.92) 100%
+        );
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: glass-shine 4s ease-in-out infinite;
+      }
+      @keyframes glass-shine {
+        0%   { background-position: 0% 50%; }
+        50%  { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      .liquid-hover { transform: translateZ(0); }
+
+      /* Gold droplet cursor — dark surfaces */
+      .glass-cursor {
+        background: transparent;
+        border: 1px solid rgba(200, 167, 84, 0.45);
+        box-shadow:
+          inset 1px 1px 1.5px rgba(255, 255, 255, 0.7),
+          0 0 4px rgba(200, 167, 84, 0.25);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        will-change: transform;
+      }
+
+      /* Blue droplet cursor — 404 page only (white background, needs contrast) */
+      .glass-cursor-dark {
+        background: rgba(2, 102, 200, 0.14);
+        border: 1.5px solid rgba(3, 105, 161, 0.88);
+        box-shadow:
+          inset 1px 1px 1.5px rgba(255, 255, 255, 0.85),
+          inset -1px -1px 2px rgba(3, 105, 161, 0.35),
+          0 2px 6px rgba(2, 102, 200, 0.35);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        will-change: transform;
+      }
+
+      /* Liquid-glass button (AI chat FAB, "View On LinkedIn") */
+      .liquid-glass-button {
+        background: rgba(8, 12, 18, 0.78);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow:
+          inset 0 0 10px rgba(255, 255, 255, 0.04),
+          0 6px 20px rgba(0, 0, 0, 0.4);
+        color: #C8A754;
+        transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+      }
+      .liquid-glass-button:hover {
+        background: rgba(14, 22, 32, 0.88);
+        box-shadow:
+          inset 0 0 14px rgba(255, 255, 255, 0.08),
+          0 0 18px rgba(200, 167, 84, 0.35);
+        border-color: rgba(200, 167, 84, 0.4);
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.jsx"></script>
+  </body>
+</html>
